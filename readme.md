@@ -10,8 +10,14 @@ It is aimed at Australian content, but most of the scripts could be applied to a
 
 The current output is a work-in-progress, but you can find the latest file here as [gzipped csv](https://interactive.guim.co.uk/2021/11/google-ad-data/aus-google-ad-data.csv.gz) or [json](https://interactive.guim.co.uk/2021/11/google-ad-data/aus-google-ad-data.json)
 
+## What it does:
 
-## To do:
+- Gets the text content from text ads
+- Gets the YouTube title for YouTube ads
+- Gets the YouTube transcript for YouTube ads if it is available
+- Gets the image URL for image ads
+
+## Still to do:
 
 - OCR images and put the text in the database
 - Figure out if there's a good way to get text from animated html ads
