@@ -16,6 +16,11 @@ import scraperwiki
 # Non YT video results https://transparencyreport.google.com/transparencyreport/api/v3/politicalads/creatives/details?entity_id=AR18849237072609280&creative_id=CR103253659495694336&hl=en
 # YT id video https://transparencyreport.google.com/transparencyreport/api/v3/politicalads/creatives/details?entity_id=AR195639161946898432&creative_id=CR62918075430731776&hl=en
 
+# TO DO
+# backup YT vids in case of removal https://towardsdatascience.com/the-easiest-way-to-download-youtube-videos-using-python-2640958318ab
+# make a audio transcriber for non-YT vids
+
+
 # Gets video type, url and ID
 
 def getVideoId(ad_url):
@@ -168,4 +173,4 @@ def addYoutubeInfoToAds():
 
 # addYoutubeInfoToAds()
 
-
+# To do: speech recognition for doubleclick ad files https://towardsdatascience.com/transcribing-interview-data-from-video-to-text-with-python-5cdb6689eea1
