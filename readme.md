@@ -6,11 +6,11 @@ It can also takes the ad targeting information and map it to electorates, but th
 
 ## To do:
 
--OCR images and put the text in the database
--Figure out if there's a good way to get text from animated html ads
--Run the non-YouTube video ads through speech-to-text and put the text in the database
--Archive ad content to S3 as Google removes it entirely when an ad is removed (eg UAP ads)
--Archive ad database daily to S3 with a timestamp
+- OCR images and put the text in the database
+- Figure out if there's a good way to get text from animated html ads
+- Run the non-YouTube video ads through speech-to-text and put the text in the database
+- Archive ad content to S3 as Google removes it entirely when an ad is removed (eg UAP ads)
+- Archive ad database daily to S3 with a timestamp
 
 
 
