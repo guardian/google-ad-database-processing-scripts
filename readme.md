@@ -6,6 +6,11 @@ It can also takes the ad targeting information and map it to electorates, but th
 
 It is aimed at Australian content, but most of the scripts could be applied to all ad content
 
+## Get the data
+
+The current output is a work-in-progress, but you can find the latest file here as [gzipped csv](https://interactive.guim.co.uk/2021/11/google-ad-data/aus-google-ad-data.csv.gz) or [json](https://interactive.guim.co.uk/2021/11/google-ad-data/aus-google-ad-data.json)
+
+
 ## To do:
 
 - OCR images and put the text in the database
