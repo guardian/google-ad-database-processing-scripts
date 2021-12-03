@@ -4,7 +4,7 @@ This is a series of scripts that takes Google's [political ad transparency data]
 
 It can also takes the ad targeting information and map it to electorates, but this only works for postcodes at the moment so isn't in the main group of scripts yet.
 
-It is aimed at Australian content, but most of the scripts could be applied to all ad content
+It is aimed at Australian content, but most of the scripts could be applied to all ad content if you'd like to use it elsewhere.
 
 ## Get the data
 
