@@ -38,7 +38,7 @@ def getAdText(ad_url):
 
 def parseTextAds():
 	# queryString = "* from aus_ads where Ad_Type='Video' AND video_id IS NULL"
-	queryString = "* from aus_ads where Ad_Type='Text'"
+	queryString = "* from aus_ads where Ad_Type='Text' AND ad_text IS NULL"
 	queryResult = scraperwiki.sqlite.select(queryString)
 	for row in queryResult:
 		# print(row)

@@ -16,15 +16,13 @@ The current output is a work-in-progress, but you can find the latest file here 
 - Gets the YouTube title for YouTube ads
 - Gets the YouTube transcript for YouTube ads if it is available
 - Gets the image URL for image ads
+- Runs images through OCR and adds text to database
 
 ## Still to do:
 
-- OCR images and put the text in the database
 - Figure out if there's a good way to get text from animated html ads
 - Run the non-YouTube video ads through speech-to-text and put the text in the database
-- Archive ad content to S3 as Google removes it entirely when an ad is removed (eg UAP ads)
-- Archive ad database daily to S3 with a timestamp
-- Add electorates for Australian ads
+- Add electorates for Australian ads (this is mostly done but I need to run it over the whole thing)
 
 
 

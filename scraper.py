@@ -8,6 +8,9 @@ from datetime import date, datetime
 
 # https://storage.googleapis.com/transparencyreport/google-political-ads-transparency-bundle.zip
 #%%
+
+todaysDate = date.strftime(datetime.now(), "%Y-%m-%d")
+
 # Remove ad folder if it already exists
 path = "google-political-ads-transparency-bundle"
 
@@ -20,10 +23,10 @@ if os.path.exists(path):
 
 print("Downloading the ad file")
 
-# r = requests.get("https://storage.googleapis.com/transparencyreport/google-political-ads-transparency-bundle.zip")
+r = requests.get("https://storage.googleapis.com/transparencyreport/google-political-ads-transparency-bundle.zip")
 
-# with open(f"{path}.zip", "wb") as file:
-# 	file.write(r.content)
+with open(f"{path}.zip", "wb") as file:
+	file.write(r.content)
 
 #%%
 
@@ -64,15 +67,32 @@ aus_dict = aus.to_dict(orient='records')
 
 scraperwiki.sqlite.save(unique_keys=["Ad_ID"], data=aus_dict, table_name="aus_ads")
 
+# Run the video parser
+
+print("Parsing video ads")
+
+import videoParser
+
+videoParser.runAllVideoStuff()
+
+# Get images
+
+print("Getting images")
+
+import imageParser
+
+imageParser.doImageStuff()
+
 # Backup today's ads with a timestamp
-#%%
+
+import textParser
+
+textParser.parseTextAds()
 
 # Archive each day's scrape somewhere
 
-# todaysDate = date.strftime(datetime.now(), "%Y-%m-%d")
-
-# if os.path.exists("adfiles"):
-# 	aus.to_csv(f"adfiles/{todaysDate}.csv")
+if os.path.exists("adfiles"):
+	aus.to_csv(f"adfiles/{todaysDate}.csv")
 
 # else:
 # 	os.mkdir("adfiles")

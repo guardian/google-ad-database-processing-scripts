@@ -20,7 +20,6 @@ import scraperwiki
 # backup YT vids in case of removal https://towardsdatascience.com/the-easiest-way-to-download-youtube-videos-using-python-2640958318ab
 # make a audio transcriber for non-YT vids
 
-
 # Gets video type, url and ID
 
 def getVideoId(ad_url):
@@ -37,14 +36,21 @@ def getVideoId(ad_url):
 
 	# If ad removed
 
-	if len(ad_results_json[0][3]) == 0:
+	if ad_results_json[0][3] == None:
 		video_id = None
 		video_type = "removed"
 		video_url = None
 		print("Removed?")
 		print(ad_url)
 
-	if len(ad_results_json[0][3]) > 0:	
+	elif len(ad_results_json[0][3]) == 0:
+		video_id = None
+		video_type = "removed"
+		video_url = None
+		print("Removed?")
+		print(ad_url)
+
+	elif len(ad_results_json[0][3]) > 0:	
 
 		# Native doubleclick video
 
@@ -62,20 +68,21 @@ def getVideoId(ad_url):
 	print({"video_id":video_id, "video_type":video_type, "video_url":video_url})			
 	return {"video_id":video_id, "video_type":video_type, "video_url":video_url}
 
-def getTranscript(id):
-	formatter = TextFormatter()
-	try:
-		transcript = YouTubeTranscriptApi.get_transcript(id)
-		text = formatter.format_transcript(transcript)
-		return text
-	except youtube_transcript_api.TranscriptsDisabled:
-		print("Transcripts disabled")
-		return None
+# def getTranscript(id):
+# 	formatter = TextFormatter()
+# 	try:
+# 		transcript = YouTubeTranscriptApi.get_transcript(id)
+# 		text = formatter.format_transcript(transcript)
+# 		return text
+# 	except youtube_transcript_api.TranscriptsDisabled:
+# 		print("Transcripts disabled")
+# 		return None
 
 def parseVideos():
-	# queryString = "* from aus_ads where Ad_Type='Video' AND video_id IS NULL"
-	queryString = "* from aus_ads where Ad_Type='Video'"
+	queryString = "* from aus_ads where Ad_Type='Video' AND video_type IS NULL"
+	# queryString = "* from aus_ads where Ad_Type='Video'"
 	queryResult = scraperwiki.sqlite.select(queryString)
+	print(len(queryResult), "videos to check")
 	for row in queryResult:
 		# print(row)
 		video_results = getVideoId(row['Ad_URL'])
@@ -161,7 +168,7 @@ def addYoutubeInfoToAds():
 	queryResult1 = scraperwiki.sqlite.select(queryString1)
 	unique_yt_vids = {v['vid_id']:v for v in queryResult1}
 	# print(unique_yt_vids)
-	queryString2 = "* from aus_ads where video_type='youtube'"
+	queryString2 = "* from aus_ads where video_type='youtube' AND yt_title IS NULL"
 	queryResult2 = scraperwiki.sqlite.select(queryString2)
 	for row in queryResult2:
 		row['yt_title'] = unique_yt_vids[row['video_id']]['title']
@@ -174,3 +181,10 @@ def addYoutubeInfoToAds():
 # addYoutubeInfoToAds()
 
 # To do: speech recognition for doubleclick ad files https://towardsdatascience.com/transcribing-interview-data-from-video-to-text-with-python-5cdb6689eea1
+
+def runAllVideoStuff():
+	parseVideos()
+	addYoutubeInfo()
+	addYoutubeInfoToAds()
+
+# runAllVideoStuff()

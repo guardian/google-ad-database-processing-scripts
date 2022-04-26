@@ -9,7 +9,8 @@ import simplejson as json
 import gzip
 import pandas as pd
 
-def uploadJson(test):
+def upload(test):
+
 	AWS_KEY = os.environ['AWS_KEY_ID']
 	AWS_SECRET = os.environ['AWS_SECRET_KEY']
 
@@ -41,4 +42,4 @@ def uploadJson(test):
 		s3.meta.client.upload_file('aus-google-ad-data.csv.gz', bucket, key2, ExtraArgs={"CacheControl":"max-age=300", 'ACL':'public-read'})
 		print("Done")
 
-uploadJson(False)		
+upload(False)		
