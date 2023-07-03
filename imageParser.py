@@ -2,6 +2,8 @@ import requests
 import simplejson as json
 import scraperwiki
 import time
+import re 
+import os
 
 # Get image Urls, download images, OCR and get the text, put text in database
 
@@ -51,11 +53,14 @@ def getImage(ad_url):
 
 			print(ad_img_url)
 			return {"image_url":ad_img_url, "image_type":"image"}
+        
 		elif "https://tpc.googlesyndication.com/sadbundle/" in ad_js:
 			start = ad_js.index("https://tpc.googlesyndication.com/sadbundle/")
 			ad_img_url = ad_js[start:]
 			ad_img_url = ad_img_url.split(";frame-src")[0]
+            
 			print(ad_img_url)
+            
 			return {"image_url":ad_img_url, "image_type":"html"}
 				
 		else:
@@ -80,51 +85,112 @@ def addImageUrls():
 		row['image_type'] = image_results['image_type']
 		scraperwiki.sqlite.save(unique_keys=["Ad_ID"], data=row, table_name="aus_ads")
 		time.sleep(0.1)
+        
+        
+def parse_HTML(url):
+    
+    #extracting html object and storing it as text in page 
+    r = requests.get(url)
+    page = r.text
+    
+    #removing unneeded characters
+    page = page.replace('"','')
+            
+    #defining regex pattern to find url endings
+    pattern = re.compile("localUrl:(.*?)}")
+            
+    #applying pattern over page
+    sub_urls = list(re.findall(pattern, page))
+    
+    return sub_urls
 
+
+
+url_i = "https://tpc.googlesyndication.com/sadbundle/$csp%3Der3$/3760334257784916408/index.html"
+url = "https://tpc.googlesyndication.com/simgad/11634816136131995676"
 
 def downloadImage(url):
 
 	# Check if the content has an image extension or is HTML
-
-	ext = url.split(".")[-1]
-	print(ext)
+    
+    ext = url.split(".")[-1]
+    print(ext)
 	# If it is an image
+    
+    if ext in images:
 
-	if ext in images:
+        print("yeh")
 
-		print("yeh")
-
-		r = requests.get(url)
-
-		img_name = url.split("/")[-1]
-
-		with open(f'adimages/{img_name}', 'wb') as f:
-		    f.write(r.content)
+        r = requests.get(url)
+        
+        img_name = url.split("/")[-1]
+        
+        with open(f'adimages/{img_name}', 'wb') as f:
+            f.write(r.content)
 	
-		return img_name    
+        return img_name    
 
-	# If it is HTML	
+	# If it is HTML
 
-	else:
+    else:
+        
+        
+        r = requests.get(url)
+        
+        img_name = url.split("/")[-1]
+        
+        def getFileExtension(contentType):
+             return contentType.split("/")[-1]
 
-		# print("nah")
-		r = requests.get(url)
-	
-		img_name = url.split("/")[-1]
+        ext = getFileExtension(r.headers['Content-Type'])
+        
+        #this keeps giving errors unles I makedir every time (idk)
+        filename = "adimages/{img_name}"
+        os.makedirs(os.path.dirname(filename), exist_ok = True)
+        
+        if ext in images:
+            with open(f'adimages/{img_name}.{ext}', 'wb') as f:
+                f.write(r.content)
+                
+            return f'{img_name}.{ext}'
+        
 
-		def getFileExtension(contentType):
-			return contentType.split("/")[-1]
-
-		ext = getFileExtension(r.headers['Content-Type'])
-
-		if ext in images:
-			with open(f'adimages/{img_name}.{ext}', 'wb') as f:
-			    f.write(r.content)
-
-			return f'{img_name}.{ext}'
-		else:
-			print("Probs not an image")	    
-			return None
+        elif ext == "html": 
+            #initialising required url suffix
+            urls = parse_HTML(url)
+        
+            #replacing index suffix with needed media suffix
+            new_url = url.replace("index.html", "media/")
+            
+            #this indexing should be generalised (remove hard coding)
+            img_name = url.split("/")[-2]
+            print(img_name)
+            
+            #new ext 
+            ext = urls[1].split(".")[-1]
+            
+           
+    
+            #need to update this to identify image type for extension before loop
+            #is currently just sampling the urls list
+            for i in range(len(urls)):
+                
+                #I couldnt see this being created anywhere so did it here
+                filename = "adimages/{img_name}"
+                os.makedirs(os.path.dirname(filename), exist_ok = True)
+                
+                with open(f'adimages/{img_name}/img_{i}_{len(urls)}.{ext}', 'wb') as f:
+                #concantenating image sub_url to new base url
+                    sub_url = new_url + urls[i]
+                    r = requests.get(sub_url)
+                    f.write(r.content)
+                    
+            return img_name
+           
+        else:
+            
+            print("Probs not an image")	    
+            return None
 
 def getImages():
 	queryString = "* from aus_ads where Ad_Type='Image' AND image_type IS NOT NULL AND image_name IS NULL"
