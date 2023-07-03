@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+scraperwiki = {git = "https://github.com/nickjevershed/scraperwiki-python-310"}
+pandas = "*"
+simplejson = "*"
+opencv-python = "*"
+pytesseract = "*"
+pillow = "*"
+youtube-transcript-api = "*"
+sqlalchemy = "==1.4.4"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

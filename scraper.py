@@ -7,6 +7,7 @@ import scraperwiki
 from datetime import date, datetime
 
 # https://storage.googleapis.com/transparencyreport/google-political-ads-transparency-bundle.zip
+# https://storage.googleapis.com/political-csv/google-political-ads-transparency-bundle.zip
 #%%
 
 todaysDate = date.strftime(datetime.now(), "%Y-%m-%d")
@@ -23,7 +24,7 @@ if os.path.exists(path):
 
 print("Downloading the ad file")
 
-r = requests.get("https://storage.googleapis.com/transparencyreport/google-political-ads-transparency-bundle.zip")
+r = requests.get("https://storage.googleapis.com/political-csv/google-political-ads-transparency-bundle.zip")
 
 with open(f"{path}.zip", "wb") as file:
 	file.write(r.content)
@@ -33,7 +34,7 @@ with open(f"{path}.zip", "wb") as file:
 # unzip the folder
 
 with zipfile.ZipFile(f"{path}.zip", 'r') as zip_ref:
-    zip_ref.extractall(".")	
+    zip_ref.extractall(f"{path}/")	
 
 #%%
 
@@ -94,9 +95,9 @@ textParser.parseTextAds()
 if os.path.exists("adfiles"):
 	aus.to_csv(f"adfiles/{todaysDate}.csv")
 
-# else:
-# 	os.mkdir("adfiles")
-# 	aus.to_csv(f"adfiles/{todaysDate}.csv")
+else:
+	os.mkdir("adfiles")
+	aus.to_csv(f"adfiles/{todaysDate}.csv")
 
 
 

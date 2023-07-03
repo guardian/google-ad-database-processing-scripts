@@ -23,6 +23,3 @@ The current output is a work-in-progress, but you can find the latest file here 
 - Figure out if there's a good way to get text from animated html ads
 - Run the non-YouTube video ads through speech-to-text and put the text in the database
 - Add electorates for Australian ads (this is mostly done but I need to run it over the whole thing)
-
-
-
