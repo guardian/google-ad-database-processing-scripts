@@ -9,3 +9,4 @@ aus-google-ad-data.*
 analysis/
 adimages/
 venv/
+geckodriver.log
